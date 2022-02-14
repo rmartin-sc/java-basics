@@ -10,6 +10,7 @@ Official Java Documentation is located at https://docs.oracle.com/en/java/javase
 <!-- TOC -->
 
 - [Java Basics](#java-basics)
+    - [Table of Contents](#table-of-contents)
     - [Java vs JavaScript](#java-vs-javascript)
     - [Java is a Compiled Language](#java-is-a-compiled-language)
         - [The Java Virtual Machine](#the-java-virtual-machine)
@@ -60,6 +61,7 @@ Official Java Documentation is located at https://docs.oracle.com/en/java/javase
             - [String Operations](#string-operations)
             - [Escape sequences](#escape-sequences)
             - [Immutability of Strings](#immutability-of-strings)
+            - [Formatting Strings](#formatting-strings)
         - [Booleans](#booleans)
             - [Comparison operators](#comparison-operators)
             - [Logical operators](#logical-operators)
@@ -856,7 +858,7 @@ s[0] = "z";    // Error!
 
 #### Formatting Strings
 
-Strings can be formatted using (format strings)[https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html#syntax]
+Strings can be formatted using [format strings](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html#syntax)
 
 ```java
 String.format("A string: %s", "Hi"); 
