@@ -816,15 +816,17 @@ String s = 'c'; // Can't assign a char to a String variables
 #### String Operations
 
 ```java
-"a" + "b"              // Yields "ab"  (concatenation)
-"a".repeat(3)          // Yields "aaa" (repetition)
-"abcdef".contains("d") // Yields: true 
-"abcdef".indexOf("d")  // Yields: 3 
-"abcdef".indexOf("z")  // Yields: -1
-"abc".toUpperCase()    // Yields "ABC"
-"ABC".toLowerCase()    // Yields "abc"
-"  abc  ".trim()       // Yields: "abc"
-"a,b,c".split(",")     // Yields an array of strings, {"a", "b", "c"}
+"a" + "b"                   // Yields "ab"  (concatenation)
+"a".repeat(3)               // Yields "aaa" (repetition)
+"abcdef".contains("d")      // Yields: true 
+"abcdef".indexOf("d")       // Yields: 3 
+"abcdef".indexOf("z")       // Yields: -1
+"abc".toUpperCase()         // Yields "ABC"
+"ABC".toLowerCase()         // Yields "abc"
+"  abc  ".trim()            // Yields: "abc"
+"a,b,c".split(",")          // Yields an array of strings, {"a", "b", "c"}
+String.join(",", strArray)  // Yields a string from an array of strings, 
+                            // with each element separated by the value in the first argument
 
 // Strings can be sliced:
 "Super duper!".substring(2,5)    // Yields "per"
@@ -850,6 +852,28 @@ Strings are immutable:
 ```java
 String s = "abcdef";
 s[0] = "z";    // Error!
+```
+
+#### Formatting Strings
+
+Strings can be formatted using (format strings)[https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html#syntax]
+
+```java
+String.format("A string: %s", "Hi"); 
+String.format("An int: %d", 42);
+String.format("A floating point number: %f");
+String.format("A date/time: %t", LocalDateTime.now());
+```
+
+Several other Java functions accept format strings:
+
+```java
+// Strings for a `formatted` method
+"My name is %s".formatted("Ali");
+
+// The printf function is like the print function but it uses a format string
+// and its subsequent arguments are the values injected into the format string
+System.out.printf("Here are three numbers, each on its own line%n%d%n%d%n%d%n", 1, 2, 3);
 ```
 
 ### Booleans
