@@ -139,7 +139,7 @@ The Java language continues to be updated regularly with new versions.  It is po
 
 Some versions of Java are released as 'long term service' (LTS) versions, and these versions are typically the ones used in production environments.
 
-The most recent LTS versions of Java are 17, 11, and 8, released in 2021, 2018, and 2014, respectively.
+The most recent LTS versions of Java are 21, 17, 11, and 8, released in 2023, 2021, 2018, and 2014, respectively.
 
 ## Running a Java REPL
 
@@ -450,9 +450,9 @@ class MyClass {
 
 ### Importing packages
 
-Import all classes (`*`) from the `ca.saulcollege`:
+Import all classes (`*`) from the `ca.saultcollege`:
 ```java
-import ca.saulcollege.*;
+import ca.saultcollege.*;
 ```
 
 Import just the `MyClass` class from the `ca.saultcollege` package:
@@ -964,7 +964,7 @@ y == x;  // This evaluates to false because x and y are two different objects!
 y == z;  // This evaluates to true, but only becuase y and z refer to the same object
 ```
 
-So how can you compare the **value** of two object types?  Most object types have an `equals()` method:
+So how can you compare the **value** of two object types?  Every object type has an `equals()` method:
 
 ```java
 Integer x = 1234;
