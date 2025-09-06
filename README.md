@@ -467,7 +467,7 @@ System.out.println("Hello, world!");
 
 ## Before you go on...
 
-If you do not have access to version 25 of Java, you may want to read the [Pre-JDK 25](https://github.com/rmartin-sc/pre-jdk-25.md) document that complements this one before reading on.
+If you do not have access to version 25 of Java, you may want to read the [Pre-JDK 25](https://github.com/rmartin-sc/java-basics/blob/main/pre-jdk-25.md) document that complements this one before reading on.
 
 ## Declaring Functions
 
