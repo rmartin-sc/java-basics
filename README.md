@@ -438,9 +438,9 @@ package ca.saultcollege;
 
 ### Importing packages
 
-Import all classes (`*`) from the `ca.saulcollege`:
+Import all classes (`*`) from the `ca.saultcollege`:
 ```java
-import ca.saulcollege.*;
+import ca.saultcollege.*;
 ```
 
 Import just the `MyClass` class from the `ca.saultcollege` package:
@@ -755,7 +755,7 @@ y == x;  // This evaluates to false because x and y are two different objects!
 y == z;  // This evaluates to true, but only becuase y and z refer to the same object
 ```
 
-So how can you compare the **value** of two object types?  Most object types have an `equals()` method:
+So how can you compare the **value** of two object types?  Every object type has an `equals()` method:
 
 ```java
 Integer x = 1234;
