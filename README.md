@@ -1,10 +1,10 @@
 # Java Basics
 
-This document introduces the basics of Java syntax for programmers coming from a basic Python background with knowledge of variables, conditionals, loops, functions, lists, dicts, file I/O, and exceptions.  No knowledge of Object-Oriented Programming (OOP) is assumed.
+This document introduces the basics of Java syntax for programmers coming from an introductory Python background with knowledge of variables, conditionals, loops, functions, lists, dicts, file I/O, and exceptions.  No knowledge of Object-Oriented Programming (OOP) is assumed.
 
 In fact, a discussion of OOP techniques is beyond the scope of this document and the reader should understand that there is *much* more to writing maintainable software in Java than is presented here.  This document simply translates the concepts mentioned above into their Java equivalents.
 
-Official Java Documentation is located at https://docs.oracle.com/en/java/javase/17/docs/api/index.html
+> **NOTE:** This document assumes a Java version of at least 25. Some features used here (like compact source files) are not available in earlier versions of Java.
 
 ## Table of Contents
 <!-- TOC -->
@@ -36,23 +36,14 @@ Official Java Documentation is located at https://docs.oracle.com/en/java/javase
     - [The Math class](#the-math-class)
   - [Packages](#packages)
     - [Importing packages](#importing-packages)
-  - [Defining Object Types (Classes)](#defining-object-types-classes)
-    - [All variables and functions belong to a class](#all-variables-and-functions-belong-to-a-class)
-    - [Member variables](#member-variables)
-      - [Visibility](#visibility)
-      - [Class variables](#class-variables)
-      - [Instance variables](#instance-variables)
-    - [Methods (Functions)](#methods-functions)
-      - [Defining Class Methods](#defining-class-methods)
-      - [Instance (non-static) Methods](#instance-non-static-methods)
-      - [Constructor Methods](#constructor-methods)
-      - [Getter and Setter Methods](#getter-and-setter-methods)
-    - [Class Documentation](#class-documentation)
-    - [Interfaces](#interfaces)
-      - [Functional Interfaces](#functional-interfaces)
   - [Printing Values](#printing-values)
+    - [Before Java 25](#before-java-25)
+  - [Before you go on...](#before-you-go-on)
+  - [Declaring Functions](#declaring-functions)
+    - [JavaDoc](#javadoc)
   - [Running a Simple Java App](#running-a-simple-java-app)
     - [Hello, world! in Java](#hello-world-in-java)
+    - [Before Java 25](#before-java-25-1)
     - [Compiling and Running a Java Code File](#compiling-and-running-a-java-code-file)
   - [Values and Operations](#values-and-operations)
     - [Numbers](#numbers)
@@ -62,8 +53,6 @@ Official Java Documentation is located at https://docs.oracle.com/en/java/javase
       - [Escape sequences](#escape-sequences)
       - [Immutability of Strings](#immutability-of-strings)
       - [Formatting Strings](#formatting-strings)
-    - [Booleans](#booleans)
-      - [Comparison operators](#comparison-operators)
       - [Logical operators](#logical-operators)
     - [Null](#null)
       - [Null and Object Types](#null-and-object-types)
@@ -95,11 +84,13 @@ Official Java Documentation is located at https://docs.oracle.com/en/java/javase
     - [Maps (dictionaries)](#maps-dictionaries)
       - [Traversing Maps](#traversing-maps)
   - [Higher-Order Functions](#higher-order-functions)
+    - [Functional Interfaces](#functional-interfaces)
     - [Method references](#method-references)
     - [Lambda expressions](#lambda-expressions)
       - [Lambda expression shorthand](#lambda-expression-shorthand)
     - [Streams and Filter / Map / Reduce](#streams-and-filter--map--reduce)
   - [Obtaining User Input](#obtaining-user-input)
+    - [Scanner](#scanner)
   - [Errors and Error Handling](#errors-and-error-handling)
     - [Raising errors](#raising-errors)
       - [Functions that raise errors](#functions-that-raise-errors)
@@ -114,32 +105,30 @@ Official Java Documentation is located at https://docs.oracle.com/en/java/javase
 
 ## Java vs JavaScript
 
-Java and JavaScript are two completely separate languages.  They have some syntactical similarities, but beyond that they are quite different.  
+Java and JavaScript are two completely separate languages.  They have some syntactical similarities, but are otherwise quite different.  
 
-When searching for information about Java, be sure you are not finding information about JavaScript instead (and vice versa)!
+When searching for information about Java, be sure you are not finding information about JavaScript instead!
 
 ## Java is a Compiled Language
 
 Java is a **compiled language**, which means that code files must be compiled before they can be executed.  This is in contrast to interpretted languages like Python, where code files are loaded and executed directly by an interpreter.
 
 ### The Java Virtual Machine
-Java programs are compiled to a special machine language called Java bytecode, which is understood by a program called the Java Virtual Machine (JVM).  The JVM is available for a wide range of platforms, making possible the 'write once, run anywhere' nature of Java programs.  
+Java programs are compiled to a secondary language called Java bytecode, which is understood by a program called the Java Virtual Machine (JVM).  The JVM is available for a wide range of platforms, making possible the 'write once, run anywhere' nature of Java programs.  
 
 This is in contrast to languages like C and C++ which must be compiled for specific CPU architectures, meaning that for a single software program there is often a need to write different code for different target platforms.
 
 ### The Java Development Kit
 In order to create Java programs, you must install a Java Development Kit (JDK).  There are many JDK implementations, some of which are free and some require paid licensing.
 
-[OpenJDK](https://jdk.java.net/17/) is a popular free open source implementation of the JDK.
-
-[Amazon](https://aws.amazon.com/corretto/) and [Microsoft](https://www.microsoft.com/openjdk) both offer free JDK implementations as well.
+[OpenJDK](https://jdk.java.net/25/) is a popular free open source implementation of the JDK.
 
 ### Java Versions
 The Java language continues to be updated regularly with new versions.  It is possible to install multiple JDKs on one system, and these JDKs may be for different versions of Java.  It is important to know which version of Java your code is using.
 
-Some versions of Java are released as 'long term service' (LTS) versions, and these versions are typically the ones used in production environments.
+Some versions of Java are released as 'long term service' (LTS) versions.  LTS versions are typically the ones used in production environments.
 
-The most recent LTS versions of Java are 17, 11, and 8, released in 2021, 2018, and 2014, respectively.
+The most recent LTS versions of Java are 21, 17, and 11, released in 2023, 2021, and 2018 respectively.
 
 ## Running a Java REPL
 
@@ -147,7 +136,7 @@ As of Java 9, JDKs come with a REPL shell called JShell.  JShell is useful for e
 
 ```java
 $ jshell
-| Welcome to JShell -- Version 17.0.1
+| Welcome to JShell -- Version 25.0.1
 | For an introduction type: /help intro
 
 jshell> int x = 1;
@@ -165,26 +154,26 @@ jshell> /exit
 
 ## Java Syntax Basics
 
-- Case sensitive (foo and Foo are two different terms)
+- Case sensitive (foo and Foo are two different names)
 - Instructions end in semi-colons
 - Indentation is NOT part of the syntax.  Instead, curly braces are used to indicate blocks of code like conditional/loop/function bodies
 
 The following two Java snippets are equivalent (but which is more readable?):
 
 ```java
-public void foo() { 
+void foo() { 
     String name = "Ali"; 
-    System.out.println("Hello, " + name + "!"); 
+    IO.println("Hello, " + name + "!"); 
 }
 ```
 
 ```java
-public void foo() { String name = "Ali"; System.out.println("Hello, " + name + "!"); }
+void foo() { String name = "Ali"; IO.println("Hello, " + name + "!"); }
 ```
 
 ### Indentation
 
-While indentation is not syntactically important, using careful indentation *does* make your code more readable, and all programmers should strive to format their code well.
+While indentation is not syntactically important, using careful indentation *does* make your code more readable, and all programmers should strive to write readable code.
 
 Typically:
 - All lines of code within a curly brace should be indented one level from the opening brace.
@@ -244,7 +233,7 @@ As of Java 10, you can use the `var` keyword in place of a variable's type for v
 - inside a function body
 - with initialization
 
-The type of such variables will be **inferred** by the compiler based on the value which the variable is initially assigned in the declaration.
+The type of such variables will be **inferred** by the compiler based on the value initially assigned to the variable in the declaration.
 
 For example:
 ```java
@@ -293,9 +282,9 @@ double    // 64-bit floating point number
 char      // 16-bit Unicode character
 ```
 
-Note that the primitive types all start with lower case letters.
+Note that the primitive type names all start with lower case letters.
 
-**NOTE:** The `char` type, which can hold a single Unicode character, has no equivalent in Python which has only strings.
+> **NOTE:** The `char` type, which can hold a single Unicode character, has no equivalent in Python which has only strings.
 
 ### Object Types (Classes)
 
@@ -315,7 +304,7 @@ s.toUpperCase(); // Yields "HELLO, WORLD!"
 
 #### Constructors
 
-Unlike Strings, which can be declared with a string literal, most object type variables must be declared using the `new` keyword followed by a call to a 'constructor function'.  Note that all constructor functions share the type's name:
+Unlike Strings, which can be declared with a string literal, most object type variables must be declared using the `new` keyword followed by a call to a 'constructor function', or just 'constructor'.  Note that all constructors share the type's name:
 
 ```java
 Object o = new Object();
@@ -332,14 +321,14 @@ ArrayList list = new ArrayList(10);     // Initialize an ArrayList with an initi
 
 #### Subclasses
 
-Object types are arranged in a 'type hierarchy' with the Object class as the 'root'.  For example, all classes in Java are 'subclasses' of the Object class.  Each subclass 'inherits' the variables and functions associated with all of its 'superclasses'.  That is, any variable or function available on a 'superclass' is also available on any of its subclasses.  A subclass may itself be a superclass for a further subclass.
+Object types are sometimes arranged in a 'type hierarchy' with the Object class as the 'root'.  For example, all classes in Java are 'subclasses' of the Object class.  Each subclass 'inherits' the variables and functions associated with all of its 'superclasses'.  That is, any variable or function available on a 'superclass' is also available on any of its subclasses.  A subclass may itself be a superclass for a further subclass.
 
-An important part of designing software in Java (and OOP languages in general) is understanding how to take advantage of this kind of type hierarchy to manage code complexity, but a discussion of such techniques and stragegies is beyond the scope of this document.
+One aspect of designing software in in OOP languages like Java is understanding when/how to take advantage of such type hierarchies, but a discussion of OOP design is beyond the scope of this document.
 
 ### Boxing and Unboxing Primitives
 Each primitive type in Java has a corresponding object type which can be used to represent the same values, but with additional useful methods available.
 
-**NOTE:** Primitive types are typically more performant than equivalent Object types, but can only be used in certain contexts.
+> **NOTE:** Primitive types are typically more performant than equivalent Object types, but can only be used in certain contexts.
 
 ```java
 Boolean  // Object version of boolean
@@ -432,20 +421,19 @@ Math.max(a, b)
 Math.min(a, b)
 ```
 
-... and [more](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Math.html)
+... and [more](https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Math.html)
 
 ## Packages
 
-Java programs are usually arranged in packages, which usually corresponds exactly with the directory structure of the code files.  For example the code file for a class in the `ca.saultcollege` package would be inside the `src/ca/saultcollege` directory.
+Java programs are usually arranged in packages, which usually correspond exactly with the directory structure of the code files.  For example the code file for a class in a `ca.saultcollege` package would be inside the `src/ca/saultcollege` directory.
 
 You declare the package a code file belongs to using a `package` statement:
 
 ```java
 package ca.saultcollege;
 
-class MyClass {
-    // This class is in the ca.saultcollege package
-}
+// This code is in the ca.saultcollege package
+// and should be in a src/ca/saultcollege directory
 ```
 
 ### Importing packages
@@ -461,201 +449,57 @@ Import just the `MyClass` class from the `ca.saultcollege` package:
 import ca.saultcollege.MyClass;
 ```
 
-## Defining Object Types (Classes)
+## Printing Values
 
-### All variables and functions belong to a class
-In Java, **every code file** must define one object type, also known as a class.  Note that this means that is is *not possible* to create a top-level (outside of a class) variable or function in Java like you can in Python.  All Java variables and functions are associated with a class.
-
-You can define your own classes using the following syntax:
+The `IO.println` function prints values to the console (like Python's `print`).
 
 ```java
-class MyClass {
-    // Code for a class
+IO.println("Hello, world!");
+```
+
+### Before Java 25
+
+Before Java 25, the `System.out.println` function was used to print values to the console:
+
+```java
+System.out.println("Hello, world!");
+```
+
+## Before you go on...
+
+If you do not have access to version 25 of Java, you may want to read the [Pre-JDK 25](https://github.com/rmartin-sc/pre-jdk-25.md) document that complements this one before reading on.
+
+## Declaring Functions
+
+Since Java is a statically typed language, every function declaration must include the type of each parameter as well as the return type of the function.
+
+```java
+<return type> <function name>( <parameter list> ) {
+    // Function body
+    // May include a return statement if return type is not void
 }
 ```
 
-Class definitions declare all variables and functions (usually referred to as properties and methods) associated with objects of that type.  There is much to know about designing classes and structuring programs using classes, but this document focuses on the minimal basics of defining a class with functions that can be called much like plain functions in Python.
-
-### Member variables
-
-The first part of a class definition is usually a set of 'member variables', i.e. a set of variables associated with either the class as a whole (class variables) or with each 'object instance' of the class (instance variables).
-
-#### Visibility
-
-Each variable in a class definition has a *visibility* which determines the scope in which the variable can be referred to.
-
-Variables that are `private` can only be referred to from within the class definition.  Variables that are `public` may be referred by code outsite the class definition.  There are [other visibilities](https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html) in Java but they are beyond the scope of this document.
-
-#### Class variables
-
-Class variables are declared using the `static` keyword:
+Example:
 
 ```java
-class MyClass {
-    public static int aClassVariable;
+int sum(int a, int b) {
+    return a + b;  // The return keyword is used to return a value
+                   // This value must be of the type specified in the function declaration
 }
 ```
 
-Class variables may be called directly on the class.  I.e. there is no need to create an object instance of the class in order to refer to a class variable:
+A function that returns no value has a 'void' return type
 
 ```java
-int x = MyClass.aClassVariable;
-int pi = Math.PI;  // PI is a class variable of the built-in Math class
-
-// This does NOT work:
-MyClass c = new MyClass();
-int x = c.aClassVaraible; // Compile-time error because this is a class variable, not an instance variable
-```
-
-Class variables are the nearest thing in Java to a top-level variable in Python.
-
-#### Instance variables
-
-Instance variables are declared *without* the `static` keyword:
-
-```java
-class MyClass {
-    public int instanceVariable;
+void greet(String name) {
+    IO.println("Hello, " + name + "!");
 }
 ```
 
-Instance variables can only be referred to using object instances of the class:
+### JavaDoc
 
-```java
-MyClass c = new MyClass();
-int x = c.instanceVariable;
-
-// This does NOT work:
-int x = MyClass.instanceVariable;
-```
-
-### Methods (Functions)
-
-In Java, functions are *always* associated with a specific object type, and are usually referred to as **methods**.
-
-Methods can be given a visibility in the same way that class/instance variables can.
-
-Methods can also be 'class methods' (static) or 'instance methods' (non-static) in the same sense as class/instance variables.
-
-#### Defining Class Methods
-
-Class methods are the nearest thing to a plain Python function that Java has.  Here is an example of a static method declaration inside a class named `MyClass`:
-
-```java
-class MyClass {
-    public static void greet(String name) {
-        // function body
-    }
-}
-```
-
-Some notes about this method:
-- The `public` keyword indicates that this is a public method (a private method would use the keyward `private` instead)
-- The `static` keyword indicates that this is a static method (removing the `static` keyword would make this an instance method)
-- The `void` keyword indicates that this function returns no value (if the function *does* return a value, that value's type must be named here instead)
-- `greet` is the name of the function
-- Inside the parentheses are the method parameters, (here, there is one parameter of type String)
-- The function body is contained within the curly braces after the method header
-
-The function above could be called like this:
-```java
-MyClass.greet("Bob");
-
-// This would NOT work because greet is a class method:
-MyClass c = new MyClass();
-c.greet("Bob");
-```
-
-#### Instance (non-static) Methods
-
-Like instance variables, instance methods are defined *without* the `static` keyword:
-
-```java
-class MyClass {
-    public void greet() {
-        System.out.println("Hello, world!");
-    }
-}
-```
-
-The function above could be called like this:
-```java
-MyClass c = new MyClass();
-c.greet();
-
-// This would NOT work because greet is an instance method:
-MyClass.greet();
-```
-
-Here are some more examples using the built-in String class:
-
-```java
-String.format("A format string %s", 1);  // format is a class method of the String class
-"abcde".toUpperCase();                   // toUpperCase is an instance method of String objects
-
-// These would NOT work:
-"A format string %s".format(1);  // format is a class method, not an instance method
-String.toUpperCase("abcde");     // toUpperCase is an instance method, not a class method
-```
-
-#### Constructor Methods
-
-In order to create a new instance of a class (i.e. an object), a class must have a 'constructor' method.  If no such method is explicitly defined in a class, an implicit parameterless constructor can be used:
-
-```java
-class MyClass {}
-
-// Even though MyClass is empty an instance can be created using the parameterless constructor:
-MyClass c = new MyClass();
-```
-
-The syntax for a constructor method is as follows:
-
-```java
-class MyClass {
-    public MyClass() {
-        // ...
-    }
-}
-```
-
-Some notes:
-- The name of the constructor method must be the same as the name of the class
-- Constructor methods have no return type
-- Constructor methods are (almost always) public
-
-Constructor methods are often used to initialize instance variables:
-```java
-class MyClass {
-    private int x;
-
-    public MyClass(xVal) {
-        x = xVal;
-    }
-}
-```
-Given the above class definition, one can create a new instance with the x instance variable initialized, like this:
-```java
-MyClass c = new MyClass(42);
-```
-
-#### Getter and Setter Methods
-It is considered best practice to make all instance variables of a class private and provide public getters and/or setters for access to those variables from outside the class:
-
-```java
-class MyClass {
-    private int x;
-
-    public int getX() { return x; }
-    public void setX(int xVal) { x = xVal; }
-}
-```
-
-Note that getters and setters are (by convention) always named 'get'/'set' plus the name of the instance variable
-
-### Class Documentation
-
-There is a special comment format called 'JavaDoc' that is used by convention to document Java code (akin to Python's docstrings).  It is considered best practice that each class, and at the very least each member of a class' public interface be documented using JavaDoc.
+There is a special comment format in Java called 'JavaDoc' that is used by convention to document Java functions (akin to Python's docstrings).  It is considered best practice to document each non-trivial function using JavaDoc.
 
 Many programming tools, including the `javadoc` command that comes with the JDK can parse JavaDoc comments and automatically produce documentation for a program.
 
@@ -666,77 +510,40 @@ Many programming tools, including the `javadoc` command that comes with the JDK 
  * @param b The other number to add
  * @return The sum of the given numbers
  */
-public int add(int a, int b) {
+int add(int a, int b) {
     return a + b;
 }
 ```
 
-**NOTE:**
-- Comment starts with `/**` (2 stars instead of the usual 1)
-- Each line begins with ` * `
-- The `@return` 'keyword' can be used to specificy information about what (if anything) the function returns
-- The `@param` 'keyword' can be used to provide information about each parameter
-  - one `@param` line per parameter
-  - The name of the parameter is included before the description of the parameter
-- You can add arbitrary documentation in addition to the `@returns` and `@param` lines
-- There is [much more](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html) you can do with this style of comment, but what you see here is enough to get you started
+> **NOTE:**
+> - JavaDoc comments start with `/**` (2 stars instead of the usual 1)
+> - Each line begins with ` * `
+> - The `@return` 'keyword' can be used to specificy information about what (if anything) the function returns
+> - The `@param` 'keyword' can be used to provide information about each parameter
+> - one `@param` line per parameter
+> - The name of the parameter is included before the description of the parameter
+> - You can add arbitrary documentation in addition to the `@returns` and `@param` lines
+> - There is [much more](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html) you can do with this style of comment, but what you see here is enough to get you started
 
-### Interfaces
-
-The 'public interface' of a class consists of its public members, i.e. its public class and instance variables, and its public class and instance methods.
-
-Interfaces can also be defined as a separate unit of code in Java, and class definitions can be declared to 'implement' interfaces:
-
-```java
-// In CanDouble.java
-interface CanDouble {
-    public int double(int n);
-}
-
-// In CanTriple.java
-interface CanTriple {
-    public int triple(int n);
-}
-
-// In MyDoubler.java:
-class MyDoubler implements CanDouble, CanTriple {
-    public int double(int n) {
-        return 2*n;
-    }
-
-    public int triple(int n) {
-        return 3*n;
-    }
-}
-```
-
-**Notes:**
-- Interfaces may only declare methods
-- The methods in an interface do not require bodies (those will be in the classes that implement the interface)
-- If a class implements an interface it *must* provide a method with the same interface as the one declared in the interface
-- The `implements` keyword precedes a comma-separated list of interface names which the class implements
-- A class may implement any number of interfaces
-- Many classes may implement any given interface
-
-#### Functional Interfaces
-
-Any interface that has **exactly one** abstract method is a 'functional interface'.  An abstract method is one with no implementation, (the implementation being defered to an implementing class).
-
-Functional interfaces are an important part of Java's approach to functional programming concepts like higher-order functions.  (See the [Higher-order functions section](#higher-order-functions) below)
-
-
-## Printing Values
-
-The `System.out.println` function prints values to the console (like Python's `print`).
-
-```java
-System.out.println("Hello, world!");
-```
 
 ## Running a Simple Java App
 
 ### Hello, world! in Java
 The basic "Hello, world!" app in Java is as follows:
+
+```java
+void main() {
+    IO.println("Hello, world!");
+}
+```
+
+> **Notes:**
+> - Every Java application must have at least one function named `main`.  This is where Java will begin executing code when the program is run.
+> - The `main` function must have a `void` return type (returns nothing)
+
+### Before Java 25
+
+Before Java 25, the simplest "Hello, world!" app in Java looked like this (can you see why Java 25 is a more pleasant experience for beginners?):
 
 ```java
 // In a file named Main.java...
@@ -747,18 +554,6 @@ class Main {
 }
 ```
 
-**Notes:**
-- Every Java code file must have a 'class' with the same name as the file (here, `Main.java` contains a class named `Main`).  
-    - **NOTE:** This file/class can have any name, it does *not* have to be called 'Main', it only matters that the file name and the class name are the same.
-- Convention is to capitalize class names (use `class Foo`, not `class foo`)
-- All code in the class is contained within curly braces.
-- Every Java application must have at least one class with a static method named `main`.  This is where Java will begin executing code when the program is run.
-- The `main` function must...
-    - be `public` (can be called from outside the Main class)
-    - be `static` (can be called on the class directly)
-    - have a `void` return type (returns nothing)
-    - accept as its only parameter an array (similar to a Python list) of Strings (`String[]`)
-
 ### Compiling and Running a Java Code File
 To run a Java program, you must first **compile** it to bytecode using the `javac` command.
 
@@ -767,7 +562,7 @@ $ javac Main.java
 # Produces a bytecode file named Main.class
 ```
 
-**NOTE:** It gets more complex for programs consisting of multiple files, but that is outside the scope of this document.
+> **NOTE:** It gets more complex for programs consisting of multiple files, but that is outside the scope of this document.
 
 Once the code has been compiled, there are many ways the code may be executed, depending on your goals.
 
@@ -778,7 +573,7 @@ $ java Main
 Hello, world!
 ```
 
-**NOTE:** When running the program, you specify the name of the *class* in which the `main` function exists, and *not* a file name.
+> **NOTE:** When running the program, you specify the name *without* the `.java` extension.
 
 
 ## Values and Operations
@@ -797,9 +592,14 @@ Hello, world!
 1 + 2       // Addition
 1 - 2       // Subtraction
 1 * 2       // Multiplication
-1 / 2       // Division
+1 / 2       // Division **See Note below**
 9 % 7       // Modulus (the remainder when 9 is divided by 7)
 ```
+
+> **NOTE:** Division of two ints yields an integer result (the quotient rounded down).  To get a float result, at least one of the operands must be a float:
+> ```java
+> 5 / 2       // Yields 2
+> 5.0 / 2     // Yields 2.5
 
 
 ### Characters and Strings
@@ -810,7 +610,7 @@ In Java, character literals are delimited using single-quotation marks, and stri
 char c = 'A';
 String s = "A string";
 
-// Below are syntax errors:
+// Syntax errors:
 char c = "A"; // Can't assign a String to a char variable
 String s = 'c'; // Can't assign a char to a String variables
 ```
@@ -836,7 +636,7 @@ String.join(",", strArray)  // Yields a string from an array of strings,
 "Super duper!".substring(-1)     // Yields "!"
 ```
 
-...and [more](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html)
+...and [more](https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html)
 
 #### Escape sequences
 
@@ -873,11 +673,6 @@ Several other Java functions accept format strings:
 // Strings for a `formatted` method
 "My name is %s".formatted("Ali");
 
-// The printf function is like the print function but it uses a format string
-// and its subsequent arguments are the values injected into the format string
-System.out.printf("Here are three numbers, each on its own line%n%d%n%d%n%d%n", 1, 2, 3);
-```
-
 ### Booleans
 
 Java has two boolean literals: `true` and `false`.
@@ -905,12 +700,12 @@ true || false == true
 ! false == true
 ```
 
-**NOTE:** `&` and `|` are also operators in Java, but they are *not* the same as `&&` and `||`
+> **NOTE:** `&` and `|` are also operators in Java, but they are *not* the same as `&&` and `||`
 
 
 ### Null
 
-In Java, that value `null` represents 'no value'. (Like Python's `None`.)
+In Java, the value `null` represents 'no value'. (Like Python's `None`.)
 
 #### Null and Object Types
 
@@ -943,7 +738,7 @@ if ( x != null && y != null ) {
 
 ### Equality and Object types
 
-The `==` operator only compares values for *primitive* types:
+The `==` operator only compares **the actual value stored in a variable**. For object types, the value stored a reference, meaning that `==` only evaluates to true if both operands refer to the **same object**. (I.e. it operates like Python's `is` operator.)
 
 ```java
 int x = 1234;
@@ -951,11 +746,7 @@ int y = 1234;
 
 // This evaluates to true!
 y == x; 
-```
 
-For object types, `==` works like Python's `is` operator—it evaluates to true only if both operands are references to the same **object**
-
-```java
 Integer x = 1234;
 Integer y = 1234;
 Integer z = y;
@@ -976,66 +767,18 @@ y.equals(x);
 
 ### Objects and References
 
-As mentioned above, Java object types are **references**.  Thus, aliasing assignments (eg. `Integer x = y`) simply create a new reference to the *same object*, and updating one of the aliases will effect both aliases.
+As mentioned above, Java object types are **references**.  Thus, aliasing assignments (eg. `Integer x = y`) simply create a new reference to the *same object*.
 
-Suppose we had the following class definition:
-```java
-class TextStore {
-    public String text;
-}
-```
-
-Consider the following code using the `TextStore` class:
+Consider the following code using the `Rectangle` class:
 
 ```java
-var x = new TextStore();
-x.text = "a";
-var y = x;                  // Aliasing assignment
-y.text = "b";
-System.out.println(x.text); // Prints "b" because x and y are aliases to the same object
+var x = new Rectangle(10,20);
+var y = x;                    // Aliasing assignment
+y.width = 30;                 // Mutate the object referenced by y
+// Prints 30 because x and y are references to the same object
+IO.println(x.width);   
 ```
 
-**NOTE:** Passing an argument is an aliasing assignment where the parameter becomes an alias for the object passed as an argument.  So mutating a parameter that is an object will change the object for the caller too!
-
-```java
-// This class serves no useful purpose other than to demonstrate the point above
-class Nonsense {
-    public static void setText(TextStore s, newText) {
-        s.text = newText;
-    }
-}
-```
-
-```java
-var x = new TextStore();
-x.text = "a";
-Nonsense.setText(x, "b");
-
-// Prints "b" because the first parameter of setText 
-// is just an alias for x
-System.out.println(x.text);   
-```
-
-Why does the function below not work?
-```java
-// This class serves no useful purpose other than to demonstrate the point below
-class AlsoNonsense {
-    public static void setText(TextStore s, newText) {
-        s = new TextStore();  // s is now a reference to a whole new object than it was originally!
-        s.text = newText;
-    }
-}
-```
-
-```java
-var x = new TextStore();
-x.text = "a";
-AlsoNonsense.setText(x, "b");
-
-System.out.println(x.text);   // Prints "a"
-```
-
-The object `x` remains unchanged in this example because the first line of `AlsoNonsense.setText`, `s = new TextStore()`, is not an aliasing assignment.  It is assigning a **new** object to `s`, after which `s` no longer references the same object as `x`.
 
 ## Conditionals
 
@@ -1113,14 +856,14 @@ The basic for loop in Java is nothing more than a while loop in which all the 'b
 ```java
 int i = 0;              // Initialization of counter
 while ( i < 10 ) {      // Check counter for exit condition
-    System.out.println(i);
+    IO.println(i);
     i += 1;             // Increment counter
 }
 ```
 
 ```java
 for ( int i = 0 ; i < 10 ; i += 1 ) {
-    System.out.println(i);
+    IO.println(i);
 }
 ```
 
@@ -1254,7 +997,7 @@ Some notes about for-each loops in Java:
 The `toCharArray` method on Strings returns an array of the `char`s in the string which can then be iterated over, like so:
 ```java
 for ( char letter : "supercalifragilisticexpialidocious".toCharArray() ) {
-    System.out.println(sletter);
+    IO.println(sletter);
 }
 ```
 
@@ -1270,7 +1013,7 @@ for ( int n : IntStream.range(0,5).toArray() ) {
 
 Java's array type has its uses when high performance is of utmost importance, but its fixed-size limitation and lack of useful methods can make it unwieldy.
 
-Java also has a set of more featureful **'collection'** types, which can be used to store collections of values.  For now, a couple collection types that are equivalent to Python's lists and dictionaries will be introduced, but there are [many more](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/doc-files/coll-reference.html).
+Java also has a set of more featureful **'collection'** types, which can be used to store collections of values.  For now, a couple collection types that are equivalent to Python's lists and dictionaries will be introduced, but there are [many more](https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/doc-files/coll-reference.html).
 
 ### Generic Collections
 
@@ -1282,11 +1025,11 @@ With generic collecions, the syntax is different.  You first state the collectio
 
 For example a `List<Integer>` is a list that holds integers; a `Map<String, Integer>` is a data structure that maps String keys to Integer values.
 
-**NOTE:** Generic collections *cannot* hold primitive types.  (But remember that primitive types can be [automatically boxed](#boxing-and-unboxing-primitives) into their corresponding object type.)
+> **NOTE:** Generic collections *cannot* hold primitive types.  (But remember that primitive types can be [automatically boxed](#boxing-and-unboxing-primitives) into their corresponding object type.)
 
 ### ArrayList
 
-Java's ArrayList is the collection object type most similar to Python's lists.
+Java's `ArrayList` is the collection object type most similar to Python's lists.
 
 ```java
 var numbers = new ArrayList<Integer>(); // A list of Integers
@@ -1343,13 +1086,28 @@ for ( String key : m.keySet() ) {
 }
 ```
 
+You can also traverse a map using its `entrySet()` method, which yields objects of type `Map.Entry<K,V>` where `K` is the key type and `V` is the value type.  This is often more efficient than using `keySet()` because it avoids having to look up each value by its key.
+
+```java
+// Assuming m is a HashMap with String keys and Integer values...
+for ( Map.Entry<String, Integer> entry : m.entrySet() ) {
+    String key = entry.getKey();
+    int val = entry.getValue();
+    // do stuff with key and/or val
+}
+```
+
 ## Higher-Order Functions
 
 In Python, functions are objects, which allows for the creation of higher-order functions (i.e. functions which accept as arguments or return other function objects).
 
-In Java, functions are *not* objects, which unfortunately procludes the creation of higher-order functions.  However, as of version 8, Java allows some syntax which enables much of the expressivity granted by higher-order functions.
+In Java, functions are *not* objects, which unfortunately precludes the creation of higher-order functions.  However, as of version 8, Java allows some syntax which enables much of the expressivity granted by higher-order functions.
 
-As an example, many collection types have a `forEach` method.  The `forEach` method expects a `Consumer` object as an argument, `Consumer` has a [functional interfaces](#functional-interfaces).  It has one `void` method that accepts one argument of a [generic type](#generic-collections).  (There are [many other functional interfaces](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/package-summary.html) in the `java.util.function` package of the JDK.)
+As an example, many collection types have a `forEach` method.  The `forEach` method expects a `Consumer` object as an argument. `Consumer` is a 'functional inteface', that is...
+
+### Functional Interfaces
+
+A full discussion of functional interfaces is beyond the scope of this document, but roughly speaking, a functional interface is a type with only one method.  The `Consumer` interface has one method which accepts one argument and returns nothing (void).
 
 You can take advantage of functional interfaces in a couple useful ways:
 
@@ -1357,21 +1115,17 @@ You can take advantage of functional interfaces in a couple useful ways:
 
 In Java, **any** method that has the same interface as that of the one method of a functional interface may be referred to using the 'method reference' syntax, which is similar to the method calling syntax excpet you use `::` instead of `.`.
 
-For example, we could print each element in a list named `myList` by calling `forEach` on the list with a references to the `System.out` object's `println` method.  This will work because `println` has the same interface as `Consumer`'s method (i.e. it is a void function that accepts one argument)
+For example, we could print each element in a list named `myList` by calling `forEach` on the list with a references to the `IO` class's `println` method.  This will work because `println` has the same interface as `Consumer`'s method (i.e. it is a void function that accepts one argument)
 
 ```java
-myList.forEach(System.out::println);  
+myList.forEach(IO::println);  
 ```
-
-This syntax works for class methods as well.  The only requirement is that the method being referenced must have the same interface as the functional interface expected by function into which the reference is being passed.
 
 ### Lambda expressions
 
 It is also permitted to use a 'lambda expression' where an object with a functional interface is expected.
 
-A lambda expression in Java is a special syntax which enables programmers to declare functions as an expression rather than as a statement. (A statement being the usual `<visibility> <return type> <name>(<params>) { .. }` syntax.)
-
-**NOTE:** The term 'lambda' refers to 'Lambda Calculus' which is the mathematical/logical foundation for expressing computations.  Lambda expressions are sometimes also referred to as 'anonymous functions' because they are essentially functions with no name.
+A lambda expression in Java is a special syntax which enables programmers to declare functions as an expression.
 
 The syntax for a lambda expression is as follows:
 
@@ -1390,7 +1144,7 @@ Here is another example using the `myList` object from above and a lambda expres
 
 ```java
 myList.forEach( (i) -> {
-    System.out.println("The next number is... " + i);
+    IO.println("The next number is... " + i);
 });
 ```
 
@@ -1423,7 +1177,7 @@ name -> "Hello, " + name
 
 Using this shorthand, the above `myList` example could be written as:
 ```java
-myList.forEach( i -> System.out.println("The next number is... " + i) );
+myList.forEach( i -> IO.println("The next number is... " + i) );
 ```
 
 ### Streams and Filter / Map / Reduce
@@ -1433,7 +1187,7 @@ Java collections have a `stream()` method which returns a `Stream` object which 
 The `filter` and `map` methods each return another `Stream` object that represents the filtered/mapped original collection, so calls may be chained:
 
 ```java
-var a = new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5));
+var a = new ArrayList<Integer>(List.of(1, 2, 3, 4, 5));
 
 a.stream()
     .filter(n -> n % 2 == 0)   // Keep only even numbers
@@ -1443,15 +1197,28 @@ a.stream()
 
 ## Obtaining User Input
 
-Obtaining input from the user is more complicated in Java than in Python.  You must first create a `Scanner` object.  Then you can prompt the user using `System.out.println` and get the user's response using the scanner object's `next` method:
+```java
+// As of Java 25...
+String response = IO.readln("What is your favourite number? ");
+```
+
+### Scanner
+
+There is a more powerful way to obtain keyboard input (and it is the *only* way before Java 25).  You must first create a `Scanner` object.  Then you can prompt the user for a response using the scanner object's `next` method:
 
 ```java
 Scanner scanner = new Scanner(System.in);
 System.out.println("What is your favourite number? ");
-String response = scanner.next();
+String response = scanner.nextLine();
 ```
 
-In exchange for this increased complexity, there is [much more power](https://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html).
+There are [functions other than `next`](https://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html) that allow you to obtain a specific type of input.
+
+```java
+int n = scanner.nextInt();
+float x = scanner.nextFloat();
+String line = scanner.next();  // Just one word (separated by space characer)
+```
 
 ## Errors and Error Handling
 
@@ -1463,17 +1230,22 @@ throw new Exception("Something bad happened");
 
 #### Functions that raise errors
 
-In Java any method that raises an error must declare this fact explicitly like so:
+Java distinguishes between two kinds of errors:
+
+1. **Runtime exceptions** are errors that may be raised at any time, and should be used to indicate programming errors.  E.g. `NullPointerException`, `IndexOutOfBoundsException`, `IllegalArgumentException`, etc.
+2. **Checked exceptions** are errors that may be raised due to external circumstances, and should be used to indicate problems that may be outside the control of the programmer.  E.g. `IOException`, `SQLException`, etc.
+
+Any function that raises a **checked exception** must declare this fact explicitly like so:
 
 ```java
-public void myFunc() throws Exception {
-    // Code that may or may not throw an Exception
+void myFunc() throws IOException {
+    // Code that may or may not throw an IOException
 }
 ```
 
 A method may throw multiple different kinds of exceptions:
 ```java
-public void myFunct() throws IOException, IndexOutOfBoundsException {
+void myFunc() throws IOException, FileNotFoundException {
     // Code that may or may not throw any of the above exceptions
 }
 ```
@@ -1565,6 +1337,7 @@ try(BufferedReader br = new BufferedReader(new FileReader("myfile.txt"))) {
         lines.add(line);
     }
 }
+// br is automatically closed when the try block exits
 ```
 
 ### Dealing with platform differences
