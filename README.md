@@ -799,29 +799,29 @@ If all the condition expressions in a conditional statement are discrete **equal
 The following two code blocks are equivalent:
 ```java
 if ( condition === 0 ) {
-    console.log("Poor");
+    IO.println("Poor");
 } else if ( condition === 1 ) {
-    console.log("Good");
+    IO.println("Good");
 } else if ( condition === 2 ) {
-    console.log("Excellent");
+    IO.println("Excellent");
 } else {
-    console.log("Unknown condition!");
+    IO.println("Unknown condition!");
 }
 ```
 
 ```java
 switch(condition) {
     case 0:
-        console.log("Poor");
+        IO.println("Poor");
         break;  // IMPORTANT: Don't forget the break after each case!!
     case 1:
-        console.log("Good");
+        IO.println("Good");
         break;
     case 2:
-        console.log("Excellent");
+        IO.println("Excellent");
         break;
     default:
-        console.log("Unknown condition!");
+        IO.println("Unknown condition!");
         break;
 }
 ```
