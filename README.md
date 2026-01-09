@@ -29,6 +29,8 @@ In fact, a discussion of OOP techniques is beyond the scope of this document and
     - [Primitive Types](#primitive-types)
     - [Object Types (Classes)](#object-types-classes)
       - [Constructors](#constructors)
+      - [`of` Factory Methods](#of-factory-methods)
+      - [`new` vs `of`](#new-vs-of)
       - [Subclasses](#subclasses)
     - [Boxing and Unboxing Primitives](#boxing-and-unboxing-primitives)
     - [Converting (Casting) Between Types](#converting-casting-between-types)
@@ -51,8 +53,11 @@ In fact, a discussion of OOP techniques is beyond the scope of this document and
     - [Characters and Strings](#characters-and-strings)
       - [String Operations](#string-operations)
       - [Escape sequences](#escape-sequences)
+      - [Text blocks](#text-blocks)
       - [Immutability of Strings](#immutability-of-strings)
       - [Formatting Strings](#formatting-strings)
+    - [Booleans](#booleans)
+      - [Comparison operators](#comparison-operators)
       - [Logical operators](#logical-operators)
     - [Null](#null)
       - [Null and Object Types](#null-and-object-types)
@@ -79,8 +84,8 @@ In fact, a discussion of OOP techniques is beyond the scope of this document and
       - [Other For-Each Loop Techniques](#other-for-each-loop-techniques)
   - [Collection Types and Generics](#collection-types-and-generics)
     - [Generic Collections](#generic-collections)
-    - [ArrayList](#arraylist)
-      - [ArrayList Operations](#arraylist-operations)
+    - [List](#list)
+      - [List Operations](#list-operations)
     - [Maps (dictionaries)](#maps-dictionaries)
       - [Traversing Maps](#traversing-maps)
   - [Higher-Order Functions](#higher-order-functions)
@@ -90,7 +95,6 @@ In fact, a discussion of OOP techniques is beyond the scope of this document and
       - [Lambda expression shorthand](#lambda-expression-shorthand)
     - [Streams and Filter / Map / Reduce](#streams-and-filter--map--reduce)
   - [Obtaining User Input](#obtaining-user-input)
-    - [Scanner](#scanner)
   - [Errors and Error Handling](#errors-and-error-handling)
     - [Raising errors](#raising-errors)
       - [Functions that raise errors](#functions-that-raise-errors)
@@ -116,7 +120,7 @@ Java is a **compiled language**, which means that code files must be compiled be
 ### The Java Virtual Machine
 Java programs are compiled to a secondary language called Java bytecode, which is understood by a program called the Java Virtual Machine (JVM).  The JVM is available for a wide range of platforms, making possible the 'write once, run anywhere' nature of Java programs.  
 
-This is in contrast to languages like C and C++ which must be compiled for specific CPU architectures, meaning that for a single software program there is often a need to write different code for different target platforms.
+This is in contrast to languages like C and C++ which must be compiled for specific CPU architectures, meaning that for a single software program there is sometimes a need to write different code for different target platforms.
 
 ### The Java Development Kit
 In order to create Java programs, you must install a Java Development Kit (JDK).  There are many JDK implementations, some of which are free and some require paid licensing.
@@ -128,7 +132,7 @@ The Java language continues to be updated regularly with new versions.  It is po
 
 Some versions of Java are released as 'long term service' (LTS) versions.  LTS versions are typically the ones used in production environments.
 
-The most recent LTS versions of Java are 21, 17, and 11, released in 2023, 2021, and 2018 respectively.
+The most recent LTS versions of Java are 25, 21, and 17, released in 2025, 2023, and 2021 respectively.
 
 ## Running a Java REPL
 
@@ -223,8 +227,8 @@ Once a variable has been declared, you may reassign the variable without indicat
 ```java
 boolean q = true;
 int x;
-x = 1;   // Ok
-x = q;   // Nope!  x and q are of different types
+x = 12;   // Ok
+q = x;   // Nope!  x and q are of different types
 ```
 
 ### Type Inference
@@ -319,6 +323,24 @@ String s = new String("Hello, world");  // Initialize a string with a value
 ArrayList list = new ArrayList(10);     // Initialize an ArrayList with an initial capacity
 ```
 
+#### `of` Factory Methods
+
+In addition to constructor methods, **some** (but not all) object types provide `of` methods that can be used to create instances of the class. 
+
+These methods usually return **immutable** instances of the type.
+
+```java
+var d = LocalDate.of(2024, 6, 15);  // Create a LocalDate representing June 15, 2024
+var letters = List.of("a", "b", "c");  // Create an immutable list of strings
+```
+
+#### `new` vs `of`
+
+The `new` keyword is necessary when calling constructors (using the type name as though it were a function).
+
+The `of` method is called on the **type name** itself.
+
+
 #### Subclasses
 
 Object types are sometimes arranged in a 'type hierarchy' with the Object class as the 'root'.  For example, all classes in Java are 'subclasses' of the Object class.  Each subclass 'inherits' the variables and functions associated with all of its 'superclasses'.  That is, any variable or function available on a 'superclass' is also available on any of its subclasses.  A subclass may itself be a superclass for a further subclass.
@@ -355,7 +377,7 @@ int z = y;
 
 ### Converting (Casting) Between Types
 
-Some classes have methods that can be used to cast from one type to another:
+Some types have methods that can be used to cast from one type to another:
 
 ```java
 // String to number
@@ -644,7 +666,37 @@ You can use the backslash to create 'escape sequences' for certain special symbo
 
 ```java
 "A pair of \"double quotes\" inside a string!"
+/* When printed yields:
+    A pair of "double quotes" inside a string!
+*/
+
 "First line\nSecond line"
+/* when printed yields:
+    First line
+    Second line
+*/
+```
+
+#### Text blocks
+
+Java supports multi-line string literals called 'text blocks' that are delimited by triple double-quotation marks:
+
+```java
+// The actual text must start on the line after the opening """
+String s = """
+    This is a text block.
+    It can span multiple lines.
+    It removes indentation.
+    """;
+    // Every subsequent line of text must start with the same indentation as the closing """
+
+// When printed, the leading spaces will be removed:
+IO.println(s);
+/* Yields:
+This is a text block.
+It can span multiple lines.
+It removes indentation.
+*/
 ```
 
 #### Immutability of Strings
@@ -672,6 +724,7 @@ Several other Java functions accept format strings:
 ```java
 // Strings for a `formatted` method
 "My name is %s".formatted("Ali");
+```
 
 ### Booleans
 
@@ -738,7 +791,7 @@ if ( x != null && y != null ) {
 
 ### Equality and Object types
 
-The `==` operator only compares **the actual value stored in a variable**. For object types, the value stored a reference, meaning that `==` only evaluates to true if both operands refer to the **same object**. (I.e. it operates like Python's `is` operator.)
+The `==` operator only compares **the actual value stored in a variable**. For object types, the value stored is a **reference**, meaning that `==` only evaluates to true if both operands refer to the **same object**. (I.e. for object types `==` is an 'identity' comparison like Python's `is` operator.)
 
 ```java
 int x = 1234;
@@ -772,11 +825,11 @@ As mentioned above, Java object types are **references**.  Thus, aliasing assign
 Consider the following code using the `Rectangle` class:
 
 ```java
-var x = new Rectangle(10,20);
-var y = x;                    // Aliasing assignment
-y.width = 30;                 // Mutate the object referenced by y
+var r1 = new Rectangle(10,20);
+var r2 = r1;                    // Aliasing assignment
+r2.width = 30;                 // Mutate the object referenced by y
 // Prints 30 because x and y are references to the same object
-IO.println(x.width);   
+IO.println(r1.width);   
 ```
 
 
@@ -798,11 +851,11 @@ If all the condition expressions in a conditional statement are discrete **equal
 
 The following two code blocks are equivalent:
 ```java
-if ( condition === 0 ) {
+if ( condition == 0 ) {
     IO.println("Poor");
-} else if ( condition === 1 ) {
+} else if ( condition == 1 ) {
     IO.println("Good");
-} else if ( condition === 2 ) {
+} else if ( condition == 2 ) {
     IO.println("Excellent");
 } else {
     IO.println("Unknown condition!");
@@ -826,7 +879,7 @@ switch(condition) {
 }
 ```
 
-As of Java 12, there is an alternate switch expression syntax:
+As of Java 12, there is an alternate switch **expression** syntax:
 
 ```java
 // condStr will have the value corresponding to the selected case
@@ -836,6 +889,7 @@ String condStr = switch (condition) {
     case 2 -> "Excellent";
     default -> "Unknown condition!";
 }
+IO.println(condStr);
 ```
 
 ## Loops
@@ -845,7 +899,7 @@ String condStr = switch (condition) {
 ```java
 while ( conditionExpression ) {
     // Instructions to execute repeatedly until conditionExpression is false
-    // (May never be executed!)
+    // (Might never be executed!)
 }
 ```
 
@@ -948,9 +1002,8 @@ int[] a = {1, 2, 3};
 int[] b = {1, 2, 3};
 int[] c = a;
 
-a == a      // Yields: true
-a == c      // Yields: true
-a == b      // Yields: false because a and b are two distinct obects
+a == c      // Yields: true because a and c refer to the same object (not because they have the same contents)
+a == b      // Yields: false because a and b are two distinct obects (even though they have the same contents)
 ```
 
 To check if two arrays contain the same set of values you can use the `Arrays.equals(..)` utility method built into Java:
@@ -1027,56 +1080,46 @@ For example a `List<Integer>` is a list that holds integers; a `Map<String, Inte
 
 > **NOTE:** Generic collections *cannot* hold primitive types.  (But remember that primitive types can be [automatically boxed](#boxing-and-unboxing-primitives) into their corresponding object type.)
 
-### ArrayList
+### List
 
-Java's `ArrayList` is the collection object type most similar to Python's lists.
+Java's `List` is the collection type most similar to Python's lists.
 
 ```java
-var numbers = new ArrayList<Integer>(); // A list of Integers
-var words = new ArrayList<String>();    // A list of Strings
+var numbers = List.of(1, 2, 3); // A list of Integers
+var words = List.of("one", "two", "three");    // A list of Strings
 ```
 
-#### ArrayList Operations
+> **NOTE:** In Java Lists are immutable.
+
+#### List Operations
 
 ```java
-// Create an ArrayList with an initial set of values using the List.of function
-var a = new ArrayList<Integer>(List.of(1, 2, 3, 4, 5));
-
-a.size();            // Yields: 5  (NOTE: ArrayLists do NOT have a length property like arrays do)
-a.contains(1);       // Yields true if 1 is in the list
-
-a.add(1);            // Add a new element with value 1 to the end of the list
-a.set(0, 99);        // Set the value at index 0 to 99
-a.addAll(b)          // Append all elements of b to a
-                     // (b must be a collection holding the same type as a)
-
-a.remove(2)                     // Delete element at index 2
-a.remove(Integer.valueOf(2))    // Delete the first element with the value 2
+var nums = new List.of(1, 2, 3, 4, 5);
+nums.size();            // Yields: 5  (NOTE: ArrayLists do NOT have a length property like arrays do)
+nums.contains(1);       // Yields true if the value 1 is in the list
 
 // Slicing arrays
-a.subList(2,4);   // Yields an ArrayList with values [3, 4]
+nums.subList(2,4);   // Yields an ArrayList with values [3, 4]
 
 // Copying arrays
-var a2 = new ArrayList(a); // Make a copy of a
+var copy = List.copyOf(nums); // Make a copy of a
 a.toArray();               // Convert the ArrayList to a regular Java array
 ```
 
 ### Maps (dictionaries)
 
-Java's HashMap class is the closest type to Python's dicts.  This type is generic over **two** types, the key type and the value type.  Each of these types is specified in the angle brackets as a comma-separated list.
+Java's Map class is the closest type to Python's dicts.  This type is generic over **two** types, the key type and the value type.  Each of these types is specified in the angle brackets as a comma-separated list.
 
 ```java
-var m = new HashMap<String, Integer>();  // Map String keys to Integer values
-m.put("mykey", 1)                        // Set a key-value pair
-m.get("mykey")              // Yields the value corresponding to the given key, 
-                            //     or null if there is no such key
-m.remove("mykey")           // Removes the entry corresponding to the given key
+var m = Map.of("key1", "val1", "key2", "val2", "key3", "val3");
 m.size()                    // The number of elements in the map
 ```
 
+**NOTE:** In Java Maps are immutable.
+
 #### Traversing Maps
 
-HashMaps may be traversed using a a `for-each` loop and the map's `keySet()` method, like so:
+Maps may be traversed using a a `for-each` loop and the map's `keySet()` method, like so:
 
 ```java
 // Assuming m is a HashMap with String keys...
@@ -1089,7 +1132,7 @@ for ( String key : m.keySet() ) {
 You can also traverse a map using its `entrySet()` method, which yields objects of type `Map.Entry<K,V>` where `K` is the key type and `V` is the value type.  This is often more efficient than using `keySet()` because it avoids having to look up each value by its key.
 
 ```java
-// Assuming m is a HashMap with String keys and Integer values...
+// Assuming m is a Map with String keys and Integer values...
 for ( Map.Entry<String, Integer> entry : m.entrySet() ) {
     String key = entry.getKey();
     int val = entry.getValue();
@@ -1099,7 +1142,7 @@ for ( Map.Entry<String, Integer> entry : m.entrySet() ) {
 
 ## Higher-Order Functions
 
-In Python, functions are objects, which allows for the creation of higher-order functions (i.e. functions which accept as arguments or return other function objects).
+In Python, functions are objects, which allows for the creation of higher-order functions (i.e. functions which accept functions as arguments or return other functions as the return value).
 
 In Java, functions are *not* objects, which unfortunately precludes the creation of higher-order functions.  However, as of version 8, Java allows some syntax which enables much of the expressivity granted by higher-order functions.
 
@@ -1136,11 +1179,11 @@ The syntax for a lambda expression is as follows:
 ```
 
 **Notes:**
-- A lambda expression has no name (it is sometimes referred as an anonymous function)
+- A lambda expression has no name (it is sometimes referred as an 'anonymous function')
 - A `->` separates the parameter list from the function body
 - No parameter or return types need to be declared.  (This is because lambda expressions are only allowed where a functional interface is expected, and the compiler can infer the types from that functional interface.)
 
-Here is another example using the `myList` object from above and a lambda expression.  Note again that the main requirement here is that the lambda expression has the same interface as the functional interface expected by the function to which the lambda is passed (in this case the `Consumer` interface's method).
+Here is another example using the `myList` object from above with a lambda expression.  Note again that the main requirement here is that the lambda expression has the same interface as the functional interface expected by the function to which the lambda is passed (in this case the `Consumer` interface's method).
 
 ```java
 myList.forEach( (i) -> {
@@ -1187,7 +1230,7 @@ Java collections have a `stream()` method which returns a `Stream` object which 
 The `filter` and `map` methods each return another `Stream` object that represents the filtered/mapped original collection, so calls may be chained:
 
 ```java
-var a = new ArrayList<Integer>(List.of(1, 2, 3, 4, 5));
+var a = List.of(1, 2, 3, 4, 5);
 
 a.stream()
     .filter(n -> n % 2 == 0)   // Keep only even numbers
@@ -1202,23 +1245,7 @@ a.stream()
 String response = IO.readln("What is your favourite number? ");
 ```
 
-### Scanner
-
-There is a more powerful way to obtain keyboard input (and it is the *only* way before Java 25).  You must first create a `Scanner` object.  Then you can prompt the user for a response using the scanner object's `next` method:
-
-```java
-Scanner scanner = new Scanner(System.in);
-System.out.println("What is your favourite number? ");
-String response = scanner.nextLine();
-```
-
-There are [functions other than `next`](https://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html) that allow you to obtain a specific type of input.
-
-```java
-int n = scanner.nextInt();
-float x = scanner.nextFloat();
-String line = scanner.next();  // Just one word (separated by space characer)
-```
+> **NOTE:** Before Java 25, you must use the `Scanner` class to obtain keyboard input, as described below. See the [Pre-JDK 25](https://github.com/rmartin-sc/java-basics/blob/main/pre-jdk-25.md) document for more information.
 
 ## Errors and Error Handling
 
@@ -1232,7 +1259,7 @@ throw new Exception("Something bad happened");
 
 Java distinguishes between two kinds of errors:
 
-1. **Runtime exceptions** are errors that may be raised at any time, and should be used to indicate programming errors.  E.g. `NullPointerException`, `IndexOutOfBoundsException`, `IllegalArgumentException`, etc.
+1. **Runtime exceptions** are errors that may be raised at any time, and should be used to indicate programming errors.  (I.e., a programmer has introduced a semantic error into the code.) E.g. `NullPointerException`, `IndexOutOfBoundsException`, `IllegalArgumentException`, etc.
 2. **Checked exceptions** are errors that may be raised due to external circumstances, and should be used to indicate problems that may be outside the control of the programmer.  E.g. `IOException`, `SQLException`, etc.
 
 Any function that raises a **checked exception** must declare this fact explicitly like so:

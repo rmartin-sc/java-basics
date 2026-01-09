@@ -2,6 +2,24 @@
 
 If you are coming from introductory Python to a version of Java before 25, the content below may help you understand some of the additional complexity you encounter when first using older versions of Java.
 
+## User Input Using Scanner
+
+To obtain keyboard input you must first create a `Scanner` object.  Then you can prompt the user for a response using the scanner object's `next` method:
+
+```java
+Scanner scanner = new Scanner(System.in);
+System.out.println("What is your favourite number? ");
+String response = scanner.nextLine();
+```
+
+There are [functions other than `next`](https://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html) that allow you to obtain a specific type of input.
+
+```java
+int n = scanner.nextInt();
+float x = scanner.nextFloat();
+String line = scanner.next();  // Just one word (separated by space characer)
+```
+
 ## Defining Object Types (Classes)
 
 ### All variables and functions belong to a class
