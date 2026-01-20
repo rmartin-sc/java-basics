@@ -642,6 +642,7 @@ String s = 'c'; // Can't assign a char to a String variables
 ```java
 "a" + "b"                   // Yields "ab"  (concatenation)
 "a".repeat(3)               // Yields "aaa" (repetition)
+"abcdef".charAt(2)         // Yields: 'c' (like "abcdef"[2] in Python))
 "abcdef".contains("d")      // Yields: true 
 "abcdef".indexOf("d")       // Yields: 3 
 "abcdef".indexOf("z")       // Yields: -1
